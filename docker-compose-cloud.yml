@@ -1,0 +1,12 @@
+version: '3.2'
+
+services:
+  app:
+    image: ${REPOSITORY_URI}/template-manager:${DOCKER_TAG}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      cache_from:
+        - ${REPOSITORY_URI}/template-manager:${DOCKER_TAG}
+      args:
+        - APP_STAGE=${APP_STAGE}

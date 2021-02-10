@@ -1,0 +1,31 @@
+FROM golang:alpine
+
+# Define ENVs
+ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
+ARG APP_STAGE
+ENV APP_STAGE $APP_STAGE
+
+RUN apk add -U --no-cache curl ca-certificates git make
+
+WORKDIR /app
+
+ADD go.mod go.sum ./
+
+RUN go mod download -x
+
+ADD . .
+
+RUN make
+
+
+FROM alpine:latest
+
+# Define ENVs
+ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
+ARG APP_STAGE
+ENV APP_STAGE $APP_STAGE
+
+RUN apk add -U --no-cache ca-certificates curl
+WORKDIR /app/
+COPY --from=0 /app/ .
+ENTRYPOINT ["/bin/sh", "/app/docker-entrypoint.sh"]
