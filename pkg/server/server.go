@@ -16,10 +16,10 @@ import (
 
 type Config struct {
 	Debug              int    `envconfig:"DEBUG" default:"0"`
-	AppEnv             string `envconfig:"APP_ENV" default:"prod"`
+	AppEnv             string `envconfig:"APP_ENV" default:"dev"`
 	Host               string `default:"http://localhost:9003"`
 	HttpAddress        string `envconfig:"HTTP_ADDRESS" default:"0.0.0.0:9003"`
-	MongoAddress       string `envconfig:"MONGO_ADDRESS" default:"mongodb://localhost:27018"`
+	MongoAddress       string `envconfig:"MONGO_ADDRESS" default:"mongodb://localhost:27019"`
 	MongoTimeout       int    `envconfig:"MONGO_TIMEOUT" default:"10"`
 	MongoDatabase      string `envconfig:"MONGO_DATABASE" default:"data_formatter"`
 	NewRelicLicenseKey string `envconfig:"NEW_RELIC_LICENSE_KEY"`
