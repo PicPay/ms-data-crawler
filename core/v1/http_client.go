@@ -1,4 +1,4 @@
-package v2
+package v1
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/PicPay/picpay-dev-ms-template-manager/pkg/log"
+	"github.com/PicPay/ms-data-formatter/pkg/log"
 	"github.com/go-resty/resty/v2"
 	"github.com/newrelic/go-agent/v3/newrelic"
 )

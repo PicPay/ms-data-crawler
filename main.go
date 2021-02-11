@@ -1,11 +1,10 @@
 package main
 
 import (
-	assemblerv2 "github.com/PicPay/picpay-dev-ms-data-formatter/core/v2/assembler"
-	"github.com/PicPay/picpay-dev-ms-data-formatter/internal/database/seed"
-	"github.com/PicPay/picpay-dev-ms-data-formatter/pkg/log"
-	"github.com/PicPay/picpay-dev-ms-data-formatter/pkg/newrelic"
-	"github.com/PicPay/picpay-dev-ms-data-formatter/pkg/server"
+	data "github.com/PicPay/ms-data-formatter/core/v1/data"
+	"github.com/PicPay/ms-data-formatter/pkg/log"
+	"github.com/PicPay/ms-data-formatter/pkg/newrelic"
+	"github.com/PicPay/ms-data-formatter/pkg/server"
 
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
@@ -27,7 +26,7 @@ func main() {
 		println(err.Error())
 	}
 
-	err = envconfig.Process("template_manager", &config)
+	err = envconfig.Process("data_formatter", &config)
 	checkFatal(err)
 
 	server, err := server.New(&config, "/health")
@@ -37,11 +36,11 @@ func main() {
 	if server.NewRelic.App != nil {
 		server.HttpServer.Router.Use(nrgin.Middleware(server.NewRelic.App))
 	}
-	
+
 	log.Info("Loading handlers for", nil)
 	err = server.Load(
-		"/v2",
-		&assemblerv2.Handler{},
+		"/v1",
+		&data.Handler{},
 	)
 
 	checkFatal(err)
@@ -54,12 +53,6 @@ func main() {
 		Version:               "0.0.2",
 		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {
-
-			if runSeed {
-				err := seed.Seed(server)
-				checkFatal(err)
-				return
-			}
 
 			log.Info("Starting HTTP serverApp", &log.LogContext{
 				"address": server.Config.HttpAddress,

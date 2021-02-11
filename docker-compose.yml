@@ -4,31 +4,31 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: api.template-manager.dev
+    container_name: api.data-formatter.dev
     env_file: .env.sample
     environment:
-      - TEMPLATE_MANAGER_MONGO_ADDRESS=mongodb://mongodb_templatemanager:27017
+      - DF_MONGO_ADDRESS=mongodb://mongodb_dataformatter:27017
     ports:
-      - 9000:9000
+      - 9003:9000
   mongo:
     image: mongo:latest
-    container_name: mongodb_templatemanager
+    container_name: mongodb_dataformatter
     environment:
       - MONGO_DATA_DIR=/data/db
     volumes:
       - mongodb_data:/data/db
     ports:
-      - 27018:27017
+      - 27019:27017
   mongo-admin:
     restart: always
     image: mongo-express:latest
-    container_name: mongo-admin_templatemanager
+    container_name: mongo-admin_dataformatter
     depends_on:
       - mongo
     links:
       - mongo
     ports:
-      - 8082:8081
+      - 8084:8081
 volumes:
   mongodb_data:
     external: false

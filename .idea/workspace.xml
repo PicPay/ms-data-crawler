@@ -10,11 +10,41 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dc2c6221-4244-4ade-9694-58e05e7a7010" name="Default Changelist" comment="" />
+    <list default="true" id="dc2c6221-4244-4ade-9694-58e05e7a7010" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/core/v1/data/controller.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/v1/data/entity.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/v1/data/repository.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/v1/data/router.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/v1/data/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v2/assembler/controller.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v2/assembler/entity.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v2/assembler/router.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v2/assembler/service.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v2/assembler/template_parser.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v2/assembler/transformer.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v2/entity.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/entity.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v2/gateway.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/gateway.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v2/http_client.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/http_client.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose-cloud.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose-cloud.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/docker-entrypoint.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pkg/http/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/http/client.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
   <component name="Git.Settings">
@@ -29,6 +59,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
