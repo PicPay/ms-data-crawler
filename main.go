@@ -26,7 +26,7 @@ func main() {
 		println(err.Error())
 	}
 
-	err = envconfig.Process("data_formatter", &config)
+	err = envconfig.Process("df", &config)
 	checkFatal(err)
 
 	server, err := server.New(&config, "/health")

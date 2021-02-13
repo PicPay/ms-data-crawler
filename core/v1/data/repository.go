@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var ErrNotFound = errors.New("component not found")
+var ErrNotFound = errors.New("data not found")
 
 type Repository struct {
 	db *mongo.Database
