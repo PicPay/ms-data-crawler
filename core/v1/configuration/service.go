@@ -45,14 +45,14 @@ func (s *Service) Fetch(ctx context.Context, identifier string, headers map[stri
 		return nil, err
 	}
 
-	midgardRows, err := s.getDataFromDatalake(ctx, crawler.Url)
+	midgardRows, err := s.getPreData(ctx, crawler.Url)
 	if err != nil {
 		return nil, err
 	}
 
 	fmt.Println("midgardData", midgardRows)
 
-	go s.getServices(ctx, data, midgardRows, crawler.UrlSource)
+	go s.getDataFromService(ctx, data, midgardRows, crawler.UrlSource)
 
 	for service := range data {
 		if arr, ok := service.data.([]interface{}); ok {
@@ -78,7 +78,7 @@ func (s *Service) Fetch(ctx context.Context, identifier string, headers map[stri
 	return &assembledScreen, err
 }
 
-func (s *Service) getDataFromDatalake(ctx context.Context, url string) (midgardRows []Midgard, err error) {
+func (s *Service) getPreData(ctx context.Context, url string) (midgardRows []Midgard, err error) {
 
 	httpClient := http.NewHttpAdapterWithOptions(10 * time.Second)
 	httpConfiguration := http.HttpConfiguration{
@@ -122,10 +122,10 @@ func (s *Service) getDataFromDatalake(ctx context.Context, url string) (midgardR
 	return
 }
 
-func (s *Service) getServices(ctx context.Context, data chan ServiceChannel, midgardRows []Midgard, dgUrl string) {
+func (s *Service) getDataFromService(ctx context.Context, data chan ServiceChannel, midgardRows []Midgard, dgUrl string) {
 	log.Info("Started", &log.LogContext{
 		"Class":         "AssemblerService",
-		"function":      "getServices",
+		"function":      "getDataFromService",
 		"Service count": len(midgardRows),
 	})
 
@@ -195,7 +195,7 @@ func (s *Service) getServices(ctx context.Context, data chan ServiceChannel, mid
 
 	log.Info("Finished", &log.LogContext{
 		"Class":    "AssemblerService",
-		"function": "getServices",
+		"function": "getDataFromService",
 	})
 }
 
