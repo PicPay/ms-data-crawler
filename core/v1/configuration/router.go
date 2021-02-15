@@ -1,7 +1,7 @@
-package data
+package configuration
 
 import (
-	"github.com/PicPay/ms-data-formatter/pkg/server"
+	"github.com/PicPay/ms-data-crawler/pkg/server"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,7 +13,7 @@ func (h *Handler) Load(r *gin.RouterGroup, server *server.Server) error {
 	assemblerService := NewService(dataRepository)
 	controller := NewController(assemblerService)
 
-	r.GET("/data/:Identifier", controller.Format)
+	r.GET("/configuration/:Identifier", controller.Format)
 
 	return nil
 }

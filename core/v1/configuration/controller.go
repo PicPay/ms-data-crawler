@@ -1,10 +1,9 @@
-package data
+package configuration
 
 import (
 	"errors"
-	"fmt"
-	"github.com/PicPay/ms-data-formatter/pkg/http"
-	"github.com/PicPay/ms-data-formatter/pkg/log"
+	"github.com/PicPay/ms-data-crawler/pkg/http"
+	"github.com/PicPay/ms-data-crawler/pkg/log"
 	"github.com/gin-gonic/gin"
 )
 
@@ -42,7 +41,6 @@ func (c *Controller) Format(ctx *gin.Context) {
 
 	identifier := ctx.Param("Identifier")
 
-	fmt.Println("Identifier", identifier)
 	if identifier == "" {
 		http.BadRequest(ctx, errors.New("Identifier is required"))
 		return

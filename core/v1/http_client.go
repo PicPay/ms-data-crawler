@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/PicPay/ms-data-formatter/pkg/log"
+	"github.com/PicPay/ms-data-crawler/pkg/log"
 	"github.com/go-resty/resty/v2"
 	"github.com/newrelic/go-agent/v3/newrelic"
 )

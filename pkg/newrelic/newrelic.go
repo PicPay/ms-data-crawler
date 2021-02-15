@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/PicPay/ms-data-formatter/pkg/log"
+	"github.com/PicPay/ms-data-crawler/pkg/log"
 	"github.com/newrelic/go-agent/v3/integrations/nrzap"
 	"github.com/newrelic/go-agent/v3/newrelic"
 )

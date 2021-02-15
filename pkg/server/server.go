@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/PicPay/ms-data-formatter/pkg/newrelic"
+	"github.com/PicPay/ms-data-crawler/pkg/newrelic"
 
-	"github.com/PicPay/ms-data-formatter/pkg/http"
-	"github.com/PicPay/ms-data-formatter/pkg/mongodb"
+	"github.com/PicPay/ms-data-crawler/pkg/http"
+	"github.com/PicPay/ms-data-crawler/pkg/mongodb"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -21,9 +21,9 @@ type Config struct {
 	HttpAddress        string `envconfig:"HTTP_ADDRESS" default:"0.0.0.0:9003"`
 	MongoAddress       string `envconfig:"MONGO_ADDRESS" default:"mongodb://localhost:27019"`
 	MongoTimeout       int    `envconfig:"MONGO_TIMEOUT" default:"10"`
-	MongoDatabase      string `envconfig:"MONGO_DATABASE" default:"data_formatter"`
+	MongoDatabase      string `envconfig:"MONGO_DATABASE" default:"data_crawler"`
 	NewRelicLicenseKey string `envconfig:"NEW_RELIC_LICENSE_KEY"`
-	PrometheusName     string `envconfig:"PROMETHEUS_NAME" default:"data_formatter_gin"`
+	PrometheusName     string `envconfig:"PROMETHEUS_NAME" default:"data_crawler_gin"`
 	PrometheusPath     string `envconfig:"PROMETHEUS_PATH" default:"/metrics"`
 }
 

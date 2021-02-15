@@ -1,10 +1,10 @@
-package data
+package configuration
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
-	http "github.com/PicPay/ms-data-formatter/core/v1"
+	http "github.com/PicPay/ms-data-crawler/core/v1"
 	"go.mongodb.org/mongo-driver/bson"
 	"strings"
 	"sync"
@@ -17,7 +17,7 @@ import (
 	"time"
 
 	*/
-	"github.com/PicPay/ms-data-formatter/pkg/log"
+	"github.com/PicPay/ms-data-crawler/pkg/log"
 )
 
 type Gateway interface {

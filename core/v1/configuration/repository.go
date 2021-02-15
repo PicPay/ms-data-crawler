@@ -1,4 +1,4 @@
-package data
+package configuration
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var ErrNotFound = errors.New("data not found")
+var ErrNotFound = errors.New("Configuration not found")
 
 type Repository struct {
 	db *mongo.Database
@@ -17,7 +17,7 @@ func NewRepository(database *mongo.Database) *Repository {
 }
 
 func (r *Repository) col() *mongo.Collection {
-	return r.db.Collection("data")
+	return r.db.Collection("configuration")
 }
 
 func (r *Repository) Find(ctx context.Context, in interface{}) (*Data, error) {

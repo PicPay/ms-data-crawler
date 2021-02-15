@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/PicPay/ms-data-formatter/pkg/log"
+	"github.com/PicPay/ms-data-crawler/pkg/log"
 	"github.com/google/go-querystring/query"
 	"github.com/parnurzeal/gorequest"
 	"github.com/sony/gobreaker"

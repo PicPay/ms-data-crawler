@@ -4,15 +4,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: api.data-formatter.dev
+    container_name: api.data-crawler.dev
     env_file: .env.sample
     environment:
-      - DF_MONGO_ADDRESS=mongodb://mongodb_dataformatter:27017
+      - DF_MONGO_ADDRESS=mongodb://mongodb_datacrawler:27017
     ports:
       - 9003:9000
   mongo:
     image: mongo:latest
-    container_name: mongodb_dataformatter
+    container_name: mongodb_datacrawler
     environment:
       - MONGO_DATA_DIR=/data/db
     volumes:
@@ -22,7 +22,7 @@ services:
   mongo-admin:
     restart: always
     image: mongo-express:latest
-    container_name: mongo-admin_dataformatter
+    container_name: mongo-admin_datacrawler
     depends_on:
       - mongo
     links:

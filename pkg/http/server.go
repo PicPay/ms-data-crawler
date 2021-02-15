@@ -7,9 +7,9 @@ import (
 	"github.com/gin-contrib/cors"
 
 	"github.com/Depado/ginprom"
-	"github.com/PicPay/ms-data-formatter/pkg/health"
-	"github.com/PicPay/ms-data-formatter/pkg/log"
-	"github.com/PicPay/ms-data-formatter/pkg/validator"
+	"github.com/PicPay/ms-data-crawler/pkg/health"
+	"github.com/PicPay/ms-data-crawler/pkg/log"
+	"github.com/PicPay/ms-data-crawler/pkg/validator"
 	"github.com/gin-contrib/pprof"
 	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"

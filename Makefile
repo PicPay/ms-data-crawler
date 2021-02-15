@@ -5,7 +5,7 @@ GOPATH ?= $(HOME)/go
 all: build
 
 build:
-	go build -o ms-data-formatter main.go
+	go build -o ms-data-crawler main.go
 
 run:
 	go run -race main.go

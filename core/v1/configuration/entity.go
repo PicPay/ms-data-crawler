@@ -1,4 +1,4 @@
-package data
+package configuration
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -34,7 +34,5 @@ type MidgardRow interface {
 
 // get_price function for Courseprice
 func (a Midgard) getId() string {
-
 	return a.Id
-
 }

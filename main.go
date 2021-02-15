@@ -1,10 +1,10 @@
 package main
 
 import (
-	data "github.com/PicPay/ms-data-formatter/core/v1/data"
-	"github.com/PicPay/ms-data-formatter/pkg/log"
-	"github.com/PicPay/ms-data-formatter/pkg/newrelic"
-	"github.com/PicPay/ms-data-formatter/pkg/server"
+	configuration "github.com/PicPay/ms-data-crawler/core/v1/configuration"
+	"github.com/PicPay/ms-data-crawler/pkg/log"
+	"github.com/PicPay/ms-data-crawler/pkg/newrelic"
+	"github.com/PicPay/ms-data-crawler/pkg/server"
 
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
@@ -26,7 +26,7 @@ func main() {
 		println(err.Error())
 	}
 
-	err = envconfig.Process("df", &config)
+	err = envconfig.Process("dc", &config)
 	checkFatal(err)
 
 	server, err := server.New(&config, "/health")
@@ -40,7 +40,7 @@ func main() {
 	log.Info("Loading handlers for", nil)
 	err = server.Load(
 		"/v1",
-		&data.Handler{},
+		&configuration.Handler{},
 	)
 
 	checkFatal(err)
@@ -48,8 +48,8 @@ func main() {
 	var runSeed bool
 
 	rootCmd := &cobra.Command{
-		Use:                   "data-formatter-service [-hs]",
-		Short:                 "data-formatter-service",
+		Use:                   "data-crawler-service [-hs]",
+		Short:                 "data-crawler-service",
 		Version:               "0.0.2",
 		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {

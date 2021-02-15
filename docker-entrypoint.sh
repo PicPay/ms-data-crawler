@@ -1,4 +1,4 @@
 #!/bin/sh
 set -e
 
-exec /app/ms-data-formatter
+exec /app/ms-data-crawler
