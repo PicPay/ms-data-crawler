@@ -36,7 +36,7 @@ func (c *Controller) getProxyHeaders(ctx *gin.Context) map[string]string {
 	return headers
 }
 
-func (c *Controller) Format(ctx *gin.Context) {
+func (c *Controller) Fetch(ctx *gin.Context) {
 	log.WithContext(ctx)
 
 	identifier := ctx.Param("Identifier")
@@ -48,7 +48,7 @@ func (c *Controller) Format(ctx *gin.Context) {
 
 	headers := c.getProxyHeaders(ctx)
 
-	jsonData, err := c.Service.Format(ctx, identifier, headers)
+	jsonData, err := c.Service.Fetch(ctx, identifier, headers)
 	if err != nil {
 		http.InternalServerError(ctx, err)
 		return

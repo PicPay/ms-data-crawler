@@ -5,19 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 	http "github.com/PicPay/ms-data-crawler/core/v1"
+	"github.com/PicPay/ms-data-crawler/pkg/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"strings"
 	"sync"
 	"time"
-	/*"encoding/json"
-	"fmt"
-	"strconv"
-	"strings"
-	"sync"
-	"time"
-
-	*/
-	"github.com/PicPay/ms-data-crawler/pkg/log"
 )
 
 type Gateway interface {
@@ -37,7 +29,7 @@ func NewService(gateway Gateway) *Service {
 	return &Service{gateway}
 }
 
-func (s *Service) Format(ctx context.Context, identifier string, headers map[string]string) (*AssembledScreen, error) {
+func (s *Service) Fetch(ctx context.Context, identifier string, headers map[string]string) (*AssembledScreen, error) {
 	log.Info("Started", &log.LogContext{
 		"Function":   "Format",
 		"identifier": identifier,

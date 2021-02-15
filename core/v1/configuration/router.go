@@ -13,7 +13,7 @@ func (h *Handler) Load(r *gin.RouterGroup, server *server.Server) error {
 	assemblerService := NewService(dataRepository)
 	controller := NewController(assemblerService)
 
-	r.GET("/configuration/:Identifier", controller.Format)
+	r.GET("/configuration/:Identifier", controller.Fetch)
 
 	return nil
 }

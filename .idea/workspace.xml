@@ -12,22 +12,9 @@
   <component name="ChangeListManager">
     <list default="true" id="dc2c6221-4244-4ade-9694-58e05e7a7010" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/v1/data/controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/configuration/controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/v1/data/entity.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/configuration/entity.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/v1/data/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/configuration/repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/v1/data/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/configuration/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/v1/data/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/configuration/service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/v1/http_client.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/http_client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose-cloud.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose-cloud.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-entrypoint.sh" beforeDir="false" afterPath="$PROJECT_DIR$/docker-entrypoint.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/http/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/http/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/http/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/http/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/newrelic/newrelic.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/newrelic/newrelic.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pkg/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/pkg/server/server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v1/configuration/controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/configuration/controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v1/configuration/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/configuration/router.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/v1/configuration/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/v1/configuration/service.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
