@@ -41,3 +41,9 @@ Instala dependencias do projeto (com `go mod download`) e instala no seu `$GOPAT
 Caso você não tenha golang instalado, você poderá subir o projeto utilizando docker.
 Basta executar o comando `make up` que ele irá subir os três serviços prioritários para você.
 Após subir, você pode popular o banco com dados iniciais usando o seed.
+
+
+## Próximos passos
+
+- Ter a versatilidade para escolher qual campo, que vai ser a chave para iniciar a concorrencia
+- Ajustar o mapping para utilizar header no serviço, assim deixando liberado para qualquer outra necessidade.
