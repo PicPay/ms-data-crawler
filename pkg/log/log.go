@@ -1,6 +1,7 @@
 package log
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	uuid2 "github.com/google/uuid"
 	"go.uber.org/zap"
@@ -29,7 +30,9 @@ func init() {
 		EncoderConfig:    encoderConfig,
 	}
 
-	if os.Getenv("DF_APP_ENV") == "dev" {
+	fmt.Println("env", os.Getenv("DC_APP_ENV"), os.Getenv("APP_ENV"), os.Getenv("app_env"))
+
+	if os.Getenv("DC_APP_ENV") == "dev" {
 		cfg.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
 		cfg.Encoding = "console"
 		cfg.DisableCaller = false
@@ -48,7 +51,7 @@ func init() {
 }
 
 func checkDebugMode() bool {
-	return os.Getenv("DF_DEBUG") == "1"
+	return os.Getenv("DC_DEBUG") == "1"
 }
 
 type LogContext map[string]interface{}

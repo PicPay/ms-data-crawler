@@ -23,10 +23,11 @@ type ServiceChannel struct {
 
 type Service struct {
 	Gateway
+	*Data
 }
 
 func NewService(gateway Gateway) *Service {
-	return &Service{gateway}
+	return &Service{gateway, &Data{}}
 }
 
 func (s *Service) Fetch(ctx context.Context, identifier string, headers map[string]string) (*AssembledScreen, error) {
@@ -45,7 +46,12 @@ func (s *Service) Fetch(ctx context.Context, identifier string, headers map[stri
 		return nil, err
 	}
 
+	s.Data = configuration
+
 	midgardRows, err := s.getPreData(ctx, configuration.Source, headers)
+
+	fmt.Println("postData midgardRows", midgardRows)
+
 	if err != nil {
 		return nil, err
 	}
@@ -77,6 +83,7 @@ func (s *Service) Fetch(ctx context.Context, identifier string, headers map[stri
 }
 
 func (s *Service) getPreData(ctx context.Context, source ServiceRequest, headers map[string]string) (midgardRows []map[string]string, err error) {
+	//func (s *Service) getPreData(ctx context.Context, source ServiceRequest, headers map[string]string) (midgardRows interface{}, err error) {
 
 	httpClient := http.NewHttpAdapterWithOptions(10 * time.Second)
 
@@ -115,31 +122,64 @@ func (s *Service) getPreData(ctx context.Context, source ServiceRequest, headers
 		"resp":   string(resp.Body),
 	})
 
-	if err = json.Unmarshal(resp.Body, &midgardRows); err != nil {
+	if err = json.Unmarshal(resp.Body, &midgardRows); err == nil {
+		return
+	}
+
+	fmt.Println("midgardRows after unmarshal", midgardRows)
+
+	log.Warn("Error from Unmasharling data from:", &log.LogContext{
+		"Class": "AssemblerService",
+		"url":   source.Url,
+		"error": err,
+	})
+
+	midgardRows, err = s.convertResponseToMarkupJson(resp.Body)
+
+	return
+}
+
+func (s *Service) convertResponseToMarkupJson(body []byte) (response []map[string]string, err error) {
+	var serviceResponse interface{}
+
+	if err := json.Unmarshal(body, &serviceResponse); err != nil {
 		log.Error("Error from Unmasharling data from:", err, &log.LogContext{
-			"Class": "AssemblerService",
-			"url":   source.Url,
-			"error": err,
+			"Function": "convertResponseToMarkupJson",
+			"error":    err,
+		})
+
+		return response, err
+	}
+
+	//fmt.Println("s", s.Data)
+
+	//fmt.Println("serviceResponse", reflect.TypeOf(serviceResponse), serviceResponse)
+
+	template := "{{if .items}}\n{{$total := len .items}}\n  [\n  {{ range $key, $value := .items }}\n  {{$text := index $value}}\n\n  {\n    \"key\" : \"{{$text}}\",\n    \"id\": \"{{$value.id}}\",\n    \"type\": \"{{$value.type}}\",\n    \"total\": \"{{$total}}\"\n    }\n  {{if HasMoreItems $key $total}}\n   ,\n  {{end}}\n    {{end}}\n  ]\n{{end}}"
+
+	tpl, err := NewTemplateParser("screen", template)
+	if err != nil {
+		log.Error("Invalid template", err, &log.LogContext{
+			"error":    err,
+			"template": template,
 		})
 
 		return
 	}
-	/*
-		fmt.Println("midgardRows", midgardRows)
-		var ttest []map[string]string
-		for key, value := range jsonMap {
-			if reflect.TypeOf(value).String() == "map[string]interface {}" {
-				tt1 := make(map[string]string)
-				for key1, value1 := range value.(map[string]interface{}) {
-					tt1[key1] = value1.(string)
 
-				}
-				ttest = append(ttest, tt1)
-			}
-		}
+	body, err = tpl.Parse(serviceResponse)
 
-		fmt.Println("Eta porra", ttest, ttest[0]["id"])
-	*/
+	//fmt.Println("body", body, string(body))
+	fmt.Println("parserError", err)
+
+	if err := json.Unmarshal(body, &response); err != nil {
+		log.Error("Error from Unmasharling data:", err, &log.LogContext{
+			"Class": "convertResponseToMarkupJson",
+			"error": err,
+		})
+
+		return response, err
+	}
 
 	return
 }
@@ -152,7 +192,6 @@ func (s *Service) getDataFromService(
 	headers map[string]string) {
 
 	log.Info("Started", &log.LogContext{
-		"Class":         "AssemblerService",
 		"function":      "getDataFromService",
 		"Service count": len(midgardRows),
 	})
@@ -196,7 +235,7 @@ func (s *Service) getDataFromService(
 			resp, err := httpClient.Send(ctx, httpConfiguration, nil)
 			if err != nil || resp.Status != 200 {
 				log.Error("Error getting data from:", err, &log.LogContext{
-					"Class":  "AssemblerService",
+					"Class":  "getDataFromService",
 					"url":    url,
 					"status": resp.Status,
 					"error":  err,
@@ -206,7 +245,7 @@ func (s *Service) getDataFromService(
 
 			body := resp.Body
 			log.Debug("Finished data from:", &log.LogContext{
-				"Class":  "AssemblerService",
+				"Class":  "getDataFromService",
 				"url":    url,
 				"status": resp.Status,
 				"resp":   string(body),
@@ -217,7 +256,7 @@ func (s *Service) getDataFromService(
 			var result interface{}
 			if err = json.Unmarshal(body, &result); err != nil {
 				log.Error("Error from Unmasharling data from:", err, &log.LogContext{
-					"Class": "AssemblerService",
+					"Class": "getDataFromService",
 					"url":   url,
 					"error": err,
 				})

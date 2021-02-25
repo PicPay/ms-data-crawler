@@ -27,6 +27,7 @@ func main() {
 	}
 
 	err = envconfig.Process("dc", &config)
+
 	checkFatal(err)
 
 	server, err := server.New(&config, "/health")
