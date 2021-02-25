@@ -47,3 +47,4 @@ Após subir, você pode popular o banco com dados iniciais usando o seed.
 
 - Ter a versatilidade para escolher qual campo, que vai ser a chave para iniciar a concorrencia
 - Ajustar o mapping para utilizar header no serviço, assim deixando liberado para qualquer outra necessidade.
+- Bater em serviços independentes, fazer uma busca de chave??
