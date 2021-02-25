@@ -3,7 +3,6 @@ package configuration
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	http "github.com/PicPay/ms-data-crawler/core/v1"
 	"github.com/PicPay/ms-data-crawler/pkg/log"
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,7 +12,7 @@ import (
 )
 
 type Gateway interface {
-	Find(ctx context.Context, in interface{}) (*Data, error)
+	Find(ctx context.Context, in interface{}) (*Configuration, error)
 }
 
 type ServiceChannel struct {
@@ -23,16 +22,16 @@ type ServiceChannel struct {
 
 type Service struct {
 	Gateway
-	*Data
+	*Configuration
 }
 
 func NewService(gateway Gateway) *Service {
-	return &Service{gateway, &Data{}}
+	return &Service{gateway, &Configuration{}}
 }
 
 func (s *Service) Fetch(ctx context.Context, identifier string, headers map[string]string) (*AssembledScreen, error) {
 	log.Info("Started", &log.LogContext{
-		"Function":   "Format",
+		"Function":   "Fetch",
 		"identifier": identifier,
 		"headers":    headers,
 	})
@@ -41,16 +40,13 @@ func (s *Service) Fetch(ctx context.Context, identifier string, headers map[stri
 	var dataServices []interface{}
 
 	configuration, err := s.Gateway.Find(ctx, bson.M{"identifier": identifier})
-	fmt.Println(configuration.Source)
 	if err != nil {
 		return nil, err
 	}
 
-	s.Data = configuration
+	s.Configuration = configuration
 
 	midgardRows, err := s.getPreData(ctx, configuration.Source, headers)
-
-	fmt.Println("postData midgardRows", midgardRows)
 
 	if err != nil {
 		return nil, err
@@ -66,8 +62,6 @@ func (s *Service) Fetch(ctx context.Context, identifier string, headers map[stri
 		}
 	}
 
-	fmt.Println("dataServices", dataServices)
-
 	assembledScreen := setScreenTemplate(
 		identifier,
 		configuration.CreatedAt,
@@ -76,14 +70,13 @@ func (s *Service) Fetch(ctx context.Context, identifier string, headers map[stri
 	)
 
 	log.Info("Finished", &log.LogContext{
-		"Function": "Format",
+		"Function": "Fetch",
 	})
 
 	return &assembledScreen, err
 }
 
 func (s *Service) getPreData(ctx context.Context, source ServiceRequest, headers map[string]string) (midgardRows []map[string]string, err error) {
-	//func (s *Service) getPreData(ctx context.Context, source ServiceRequest, headers map[string]string) (midgardRows interface{}, err error) {
 
 	httpClient := http.NewHttpAdapterWithOptions(10 * time.Second)
 
@@ -100,81 +93,83 @@ func (s *Service) getPreData(ctx context.Context, source ServiceRequest, headers
 	}
 
 	log.Info("Getting data from:", &log.LogContext{
-		"Class": "AssemblerService",
-		"url":   url,
+		"function": "getPreData",
+		"url":      url,
 	})
 
 	resp, err := httpClient.Send(ctx, httpConfiguration, nil)
 	if err != nil || resp.Status != 200 {
 		log.Error("Error getting data from:", err, &log.LogContext{
-			"Class":  "AssemblerService",
-			"url":    url,
-			"status": resp.Status,
-			"error":  err,
+			"function": "getPreData",
+			"url":      url,
+			"status":   resp.Status,
+			"error":    err,
 		})
 		return
 	}
 
 	log.Debug("Finished data from:", &log.LogContext{
-		"Class":  "AssemblerService",
-		"url":    source.Url,
-		"status": resp.Status,
-		"resp":   string(resp.Body),
+		"function": "getPreData",
+		"url":      source.Url,
+		"status":   resp.Status,
+		"resp":     string(resp.Body),
 	})
 
 	if err = json.Unmarshal(resp.Body, &midgardRows); err == nil {
 		return
 	}
 
-	fmt.Println("midgardRows after unmarshal", midgardRows)
-
-	log.Warn("Error from Unmasharling data from:", &log.LogContext{
-		"Class": "AssemblerService",
+	log.Warn("Error from Unmasharling data from - needs []map[string] or responseFormat json", &log.LogContext{
 		"url":   source.Url,
 		"error": err,
 	})
 
-	midgardRows, err = s.convertResponseToMarkupJson(resp.Body)
+	if s.Source.HasResponseFormat() {
+		midgardRows, err = s.formatResponseToMarkupJson(resp.Body, s.Source.ResponseFormat)
+	}
 
 	return
 }
 
-func (s *Service) convertResponseToMarkupJson(body []byte) (response []map[string]string, err error) {
+func (s *Service) formatResponseToMarkupJson(body []byte, markupJson string) (response []map[string]string, err error) {
 	var serviceResponse interface{}
+	var newBody []byte
 
 	if err := json.Unmarshal(body, &serviceResponse); err != nil {
-		log.Error("Error from Unmasharling data from:", err, &log.LogContext{
-			"Function": "convertResponseToMarkupJson",
+		log.Error("Error from Unmasharling data to interface{} from:", err, &log.LogContext{
+			"Function": "formatResponseToMarkupJson",
 			"error":    err,
 		})
 
 		return response, err
 	}
 
-	//fmt.Println("s", s.Data)
+	tpl, err := NewTemplateParser("newJson", markupJson)
 
-	//fmt.Println("serviceResponse", reflect.TypeOf(serviceResponse), serviceResponse)
-
-	template := "{{if .items}}\n{{$total := len .items}}\n  [\n  {{ range $key, $value := .items }}\n  {{$text := index $value}}\n\n  {\n    \"key\" : \"{{$text}}\",\n    \"id\": \"{{$value.id}}\",\n    \"type\": \"{{$value.type}}\",\n    \"total\": \"{{$total}}\"\n    }\n  {{if HasMoreItems $key $total}}\n   ,\n  {{end}}\n    {{end}}\n  ]\n{{end}}"
-
-	tpl, err := NewTemplateParser("screen", template)
 	if err != nil {
 		log.Error("Invalid template", err, &log.LogContext{
 			"error":    err,
-			"template": template,
+			"template": markupJson,
 		})
 
 		return
 	}
 
-	body, err = tpl.Parse(serviceResponse)
+	newBody, err = tpl.Parse(serviceResponse)
 
-	//fmt.Println("body", body, string(body))
-	fmt.Println("parserError", err)
+	if err != nil {
+		log.Error("Error from parsing template into data:", err, &log.LogContext{
+			"Class": "formatResponseToMarkupJson",
+			"error": err,
+			"data":  string(newBody),
+		})
 
-	if err := json.Unmarshal(body, &response); err != nil {
-		log.Error("Error from Unmasharling data:", err, &log.LogContext{
-			"Class": "convertResponseToMarkupJson",
+		return response, err
+	}
+
+	if err := json.Unmarshal(newBody, &response); err != nil {
+		log.Error("Error from Unmasharling newBody data - Check template for typo's:", err, &log.LogContext{
+			"Class": "formatResponseToMarkupJson",
 			"error": err,
 		})
 
@@ -200,7 +195,6 @@ func (s *Service) getDataFromService(
 	wg.Add(len(midgardRows))
 
 	for _, midgardData := range midgardRows {
-		fmt.Println("midgardData", midgardData)
 		go func(wg *sync.WaitGroup, data chan ServiceChannel, Crawlers []ServiceRequest, midgardData map[string]string, headers map[string]string) {
 			defer wg.Done()
 
@@ -218,13 +212,6 @@ func (s *Service) getDataFromService(
 				url = replaceUrlMarkup(url, crawler.Mapping, headers)
 				url = replaceUrlMarkup(url, crawler.Mapping, midgardData)
 			}
-
-			fmt.Println("Crawler", url)
-
-			log.Debug("Request header", &log.LogContext{
-				"Class": "AssemblerService",
-				"url":   url,
-			})
 
 			httpClient := http.NewHttpAdapterWithOptions(10 * time.Second)
 			httpConfiguration := http.HttpConfiguration{
@@ -251,8 +238,6 @@ func (s *Service) getDataFromService(
 				"resp":   string(body),
 			})
 
-			log.Debug("Applying body transformations:", &log.LogContext{})
-
 			var result interface{}
 			if err = json.Unmarshal(body, &result); err != nil {
 				log.Error("Error from Unmasharling data from:", err, &log.LogContext{
@@ -274,7 +259,6 @@ func (s *Service) getDataFromService(
 	close(data)
 
 	log.Info("Finished", &log.LogContext{
-		"Class":    "AssemblerService",
 		"function": "getDataFromService",
 	})
 }
@@ -291,7 +275,6 @@ func validateCrawler(crawlers []ServiceRequest, crawlerType string) ServiceReque
 func replaceUrlMarkup(url string, mapping []KeyValue, keys map[string]string) (newUrl string) {
 	newUrl = url
 	for _, markup := range mapping {
-		fmt.Println("markup", url, markup.Index, markup.Value, keys[markup.Value])
 		if keys[markup.Value] != "" {
 			newUrl = strings.ReplaceAll(url, markup.Index, keys[markup.Value])
 			return

@@ -1,7 +1,7 @@
 package main
 
 import (
-	configuration "github.com/PicPay/ms-data-crawler/core/v1/configuration"
+	"github.com/PicPay/ms-data-crawler/core/v1/configuration"
 	"github.com/PicPay/ms-data-crawler/pkg/log"
 	"github.com/PicPay/ms-data-crawler/pkg/newrelic"
 	"github.com/PicPay/ms-data-crawler/pkg/server"
@@ -46,12 +46,10 @@ func main() {
 
 	checkFatal(err)
 
-	var runSeed bool
-
 	rootCmd := &cobra.Command{
 		Use:                   "data-crawler-service [-hs]",
 		Short:                 "data-crawler-service",
-		Version:               "0.0.2",
+		Version:               "0.0.1",
 		DisableFlagsInUseLine: true,
 		Run: func(cmd *cobra.Command, args []string) {
 
@@ -62,8 +60,6 @@ func main() {
 			server.Start()
 		},
 	}
-
-	rootCmd.PersistentFlags().BoolVarP(&runSeed, "seed", "s", false, "run database seed")
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal("Error to execute root command", err, nil)

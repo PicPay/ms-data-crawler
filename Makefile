@@ -37,7 +37,7 @@ docs:
 	$(GOPATH)/bin/swag init
 
 dev:
-	DF_APP_ENV=dev $(GOPATH)/bin/reflex -s -r '\.go$$' make format run
+	DC_APP_ENV=dev $(GOPATH)/bin/reflex -s -r '\.go$$' make format run
 
 test:
 	go test ./core/...

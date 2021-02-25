@@ -20,8 +20,8 @@ func (r *Repository) col() *mongo.Collection {
 	return r.db.Collection("configuration")
 }
 
-func (r *Repository) Find(ctx context.Context, in interface{}) (*Data, error) {
-	var data Data
+func (r *Repository) Find(ctx context.Context, in interface{}) (*Configuration, error) {
+	var data Configuration
 	if err := r.col().FindOne(ctx, in).Decode(&data); err != nil {
 		return nil, ErrNotFound
 	}

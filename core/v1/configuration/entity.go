@@ -11,17 +11,18 @@ type KeyValue struct {
 }
 
 type ServiceRequest struct {
-	Name        string     `bson:"name" json:"name" binding:"required"`
-	Url         string     `bson:"url" json:"url" binding:"required,url"`
-	Body        string     `bson:"body,omitempty" json:"body"`
-	Headers     []KeyValue `bson:"headers,omitempty" json:"headers"`
-	Mapping     []KeyValue `bson:"mapping,omitempty" json:"mapping"`
-	Validation  []KeyValue `bson:"validation,omitempty" json:"validation"`
-	Method      string     `bson:"method" json:"method" binding:"required"`
-	ContentType string     `bson:"content_type" json:"content_type"`
+	Name           string     `bson:"name" json:"name" binding:"required"`
+	Url            string     `bson:"url" json:"url" binding:"required,url"`
+	Body           string     `bson:"body,omitempty" json:"body"`
+	Headers        []KeyValue `bson:"headers,omitempty" json:"headers"`
+	Mapping        []KeyValue `bson:"mapping,omitempty" json:"mapping"`
+	Validation     []KeyValue `bson:"validation,omitempty" json:"validation"`
+	Method         string     `bson:"method" json:"method" binding:"required"`
+	ContentType    string     `bson:"content_type" json:"content_type"`
+	ResponseFormat string     `bson:"response_format,omitempty" json:"response_format"`
 }
 
-type Data struct {
+type Configuration struct {
 	ID         primitive.ObjectID `bson:"_id" json:"id"`
 	Identifier string             `bson:"identifier" json:"identifier" binding:"required"`
 	Source     ServiceRequest     `bson:"source" json:"source" binding:"required"`
@@ -39,4 +40,8 @@ type AssembledScreen struct {
 
 func (crawler ServiceRequest) HasMapping() bool {
 	return crawler.Mapping != nil
+}
+
+func (crawler ServiceRequest) HasResponseFormat() bool {
+	return crawler.ResponseFormat != ""
 }
