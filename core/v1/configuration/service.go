@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+//go:generate go run github.com/golang/mock/mockgen -destination=../configuration/mock_gateway.go -package=configuration -self_package=github.com/PicPay/ms-data-crawler/core/v1/configuration . Gateway
 type Gateway interface {
 	Find(ctx context.Context, in interface{}) (*Configuration, error)
 }
@@ -23,10 +24,11 @@ type ServiceChannel struct {
 type Service struct {
 	Gateway
 	*Configuration
+	http.HttpClient
 }
 
-func NewService(gateway Gateway) *Service {
-	return &Service{gateway, &Configuration{}}
+func NewService(gateway Gateway, httpClient http.HttpClient) *Service {
+	return &Service{gateway, &Configuration{}, httpClient}
 }
 
 func (s *Service) Fetch(ctx context.Context, identifier string, headers map[string]string) (*AssembledScreen, error) {
@@ -77,9 +79,6 @@ func (s *Service) Fetch(ctx context.Context, identifier string, headers map[stri
 }
 
 func (s *Service) getPreData(ctx context.Context, source ServiceRequest, headers map[string]string) (midgardRows []map[string]string, err error) {
-
-	httpClient := http.NewHttpAdapterWithOptions(10 * time.Second)
-
 	url := source.Url
 
 	// if service mapping matches with any header key,
@@ -97,7 +96,7 @@ func (s *Service) getPreData(ctx context.Context, source ServiceRequest, headers
 		"url":      url,
 	})
 
-	resp, err := httpClient.Send(ctx, httpConfiguration, nil)
+	resp, err := s.HttpClient.Send(ctx, httpConfiguration, nil)
 	if err != nil || resp.Status != 200 {
 		log.Error("Error getting data from:", err, &log.LogContext{
 			"function": "getPreData",
@@ -195,7 +194,8 @@ func (s *Service) getDataFromService(
 	wg.Add(len(midgardRows))
 
 	for _, midgardData := range midgardRows {
-		go func(wg *sync.WaitGroup, data chan ServiceChannel, Crawlers []ServiceRequest, midgardData map[string]string, headers map[string]string) {
+		httpClient := s.HttpClient
+		go func(wg *sync.WaitGroup, data chan ServiceChannel, Crawlers []ServiceRequest, midgardData map[string]string, headers map[string]string, httpClient http.HttpClient) {
 			defer wg.Done()
 
 			crawler := validateCrawler(Crawlers, midgardData["type"])
@@ -213,7 +213,6 @@ func (s *Service) getDataFromService(
 				url = replaceUrlMarkup(url, crawler.Mapping, midgardData)
 			}
 
-			httpClient := http.NewHttpAdapterWithOptions(10 * time.Second)
 			httpConfiguration := http.HttpConfiguration{
 				URL:    url,
 				Method: "GET",
@@ -252,7 +251,7 @@ func (s *Service) getDataFromService(
 			if len(body) > 0 {
 				data <- ServiceChannel{result, time.Now().String()}
 			}
-		}(&wg, data, Crawlers, midgardData, headers)
+		}(&wg, data, Crawlers, midgardData, headers, httpClient)
 	}
 
 	wg.Wait()

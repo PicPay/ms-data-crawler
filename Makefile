@@ -39,6 +39,9 @@ docs:
 dev:
 	DC_APP_ENV=dev $(GOPATH)/bin/reflex -s -r '\.go$$' make format run
 
+dev2:
+	DC_APP_ENV=test DC_HTTP_ADDRESS=0.0.0.0:9004 $(GOPATH)/bin/reflex -s -r '\.go$$' make format run
+
 test:
 	go test ./core/...
 

@@ -15,7 +15,7 @@ require (
 	github.com/go-playground/validator/v10 v10.3.0
 	github.com/go-resty/resty/v2 v2.3.0
 	github.com/gobeam/mongo-go-pagination v0.0.1 // indirect
-	github.com/golang/mock v1.4.4 // indirect
+	github.com/golang/mock v1.4.4
 	github.com/google/go-querystring v1.0.0
 	github.com/google/uuid v1.1.2
 	github.com/joho/godotenv v1.3.0
@@ -30,7 +30,7 @@ require (
 	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/sony/gobreaker v0.4.1
 	github.com/spf13/cobra v0.0.3
-	github.com/stretchr/testify v1.4.0 // indirect
+	github.com/stretchr/testify v1.4.0
 	github.com/swaggo/swag v1.6.7 // indirect
 	github.com/tidwall/pretty v1.0.2 // indirect
 	go.mongodb.org/mongo-driver v1.4.0

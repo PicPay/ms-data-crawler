@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/PicPay/ms-data-crawler/core/v1/configuration"
 	"github.com/PicPay/ms-data-crawler/pkg/log"
 	"github.com/PicPay/ms-data-crawler/pkg/newrelic"
@@ -21,12 +22,14 @@ func checkFatal(err error) {
 }
 
 func main() {
-	err := godotenv.Load()
+	err := godotenv.Load(".env", ".env.testing")
 	if err != nil {
 		println(err.Error())
 	}
 
 	err = envconfig.Process("dc", &config)
+
+	fmt.Println("config", config)
 
 	checkFatal(err)
 
