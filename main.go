@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/PicPay/ms-data-crawler/core/v1/configuration"
 	"github.com/PicPay/ms-data-crawler/pkg/log"
 	"github.com/PicPay/ms-data-crawler/pkg/newrelic"
@@ -28,8 +27,6 @@ func main() {
 	}
 
 	err = envconfig.Process("dc", &config)
-
-	fmt.Println("config", config)
 
 	checkFatal(err)
 

@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var ErrNotFound = errors.New("Configuration not found")
+var ConfigNotFound = errors.New("Configuration not found")
 
 type Repository struct {
 	db *mongo.Database
@@ -23,7 +23,7 @@ func (r *Repository) col() *mongo.Collection {
 func (r *Repository) Find(ctx context.Context, in interface{}) (*Configuration, error) {
 	var data Configuration
 	if err := r.col().FindOne(ctx, in).Decode(&data); err != nil {
-		return nil, ErrNotFound
+		return nil, ConfigNotFound
 	}
 
 	return &data, nil
