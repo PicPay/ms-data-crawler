@@ -1,7 +1,6 @@
 package log
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	uuid2 "github.com/google/uuid"
 	"go.uber.org/zap"
@@ -29,8 +28,6 @@ func init() {
 		ErrorOutputPaths: []string{"stdout"},
 		EncoderConfig:    encoderConfig,
 	}
-
-	fmt.Println("env", os.Getenv("DC_APP_ENV"), os.Getenv("APP_ENV"), os.Getenv("app_env"))
 
 	if os.Getenv("DC_APP_ENV") == "dev" {
 		cfg.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
